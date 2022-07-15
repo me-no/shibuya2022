@@ -9,6 +9,7 @@ var colors = [
 ];
 
 var purpleColor = [103, 96, 127];
+var cyanColor = [89,147,171];
 
 // for actual size
 var actualSize = 384;
@@ -22,6 +23,7 @@ let w; // Width of entire wave
 let w_fish;
 let theta = 0.0; // Start angle at 0
 let theta_fish  = 0.0;
+let theta_paper =0.0;
 let amplitude = 18.0; // Height of wave
 let amplitude_fish = 18.0*2;
 let period = 180.0; // How many pixels before the wave repeats
@@ -31,6 +33,8 @@ let yvalues; // Using an array to store height values for the wave
 let yvalues_fish;
 
 var nz = 1;
+var nz_x = 1;
+var nz_y = 2;
 
 function preload() {
     // Font
@@ -42,13 +46,16 @@ function preload() {
     imgkoilight = loadImage("lightfish.png");
     imgkoiblue_nostroke = loadImage("bluefish_noStroke.png");
     imgkoiblue = loadImage("bluefish.png");
+    imgkoioutlined = loadImage("fish_outlined.png");
 
     imgkoimain = loadImage("koi.png");
     imgkoimain_back = loadImage("koi_purpleback.png");
     imgkoimain_white = loadImage("koi_whiteback.png");
+    imgfloat = loadImage("floatfront.png");
 
     imgpaper_s = loadImage("paper_small.png");
     imgpaper_l = loadImage("paper_large.png");
+    imgpaper_outlined = loadImage("paper_l_outlined.png");
 
     imgsakura_deep = loadImage("deepsakura.png");
     imgsakura_light = loadImage("lightsakura.png")
@@ -100,7 +107,7 @@ function draw() {
     v = -(x*x/1963)*scal+v0;// 上側の境界
     t = (x*x/1963)*scal+t0;// 下側の境界
 
-    // 魚群の生成
+    // 桜吹雪の生成
     fishDice = int(random(0,2));
     if (y < v - 44) {
         if (fishDice % 2 ===0) {
@@ -142,12 +149,17 @@ function draw() {
     } else if (y >= t-33) {
         r = int(random(2, 15))*2-1;// 奇数で出力
         tr = random(0, 50);
+        noStroke();
+        purpleDice = int(random(0,2));
+        //if(purpleDice % 2 !=0){
+            fill(purpleColor[0], purpleColor[1], purpleColor[2], tr);
+        //} else {
+            //fill(cyanColor[0], cyanColor[1], cyanColor[2], tr);
+        //}
         for (i = 0; i < r; i++) {
             ii = i*2+1;
             j = (r - ii)/2;
             l = r - j*2;
-            noStroke();
-            fill(purpleColor[0], purpleColor[1], purpleColor[2], tr);
             for (k = 0; k<l; k++) {
                 rect(x+t0+j*scal+k*scal, y+i*scal, scal, scal);
                 if(i!=r-1){
@@ -179,7 +191,7 @@ function draw() {
         yvalues[i] = sin(phi) * amplitude;
         phi +=dx;
     }
-    theta_fish += 0.001;
+    theta_fish += 0.002;
     let phi_fish = theta_fish;
     for (let j = 0; j < yvalues_fish.length; j++) {
         yvalues_fish[j] = sin(phi_fish) * amplitude_fish;
@@ -194,7 +206,7 @@ function draw() {
     for (let x = 0; x < yvalues_fish.length; x ++) {
             //image(imgkoiblue_nostroke, x*xspacing_fish, height/2+yvalues_fish[x], 34*scal, 13*scal);
             //image(imgkoiblue, x*xspacing, height/2+yvalues[x], 36*scal, 15*scal);// なんかおもろいミス
-            image(imgkoiblue, x*xspacing_fish - 20*scal, height/2+8*scal +yvalues_fish[x], 36*scal, 15*scal);
+            image(imgkoioutlined, x*xspacing_fish - 20*scal, height/2+8*scal +yvalues_fish[x], 36*scal, 16*scal);
     }
     /*
     for (let x = 0; x < yvalues_fish.length*10; x += 4) {
@@ -211,35 +223,32 @@ function draw() {
     }
     */
 
-    // 紫で全範囲塗る
-    /*
-    x = int(random(-actualSize/2, actualSize/2))*scal;// x とy が魚の頂点; x はグラフの横移動を考慮した範囲
-    y = int(random(-15, actualSize))*scal;
-    r = int(random(2, 15))*2-1;// 奇数で出力
-    tr = random(100, 200);
-    for (i = 0; i < r; i++) {
-        ii = i*2+1;
-        j = (r - ii)/2;
-        l = r - j*2;
-        noStroke();
-        fill(purpleColor[0], purpleColor[1], purpleColor[2], tr);
-        for (k = 0; k<l; k++) {
-            rect(x+t0+j*scal+k*scal, y+i*scal, scal, scal);
-            if(i!=r-1){
-                rect(x+t0+j*scal+k*scal, y+2*r*scal-i*scal-scal*2, scal, scal);
-            }
-        }
-    }
-    */
-
     // plot image 
     image(imgkoimain, 0, 0, width, height);
     image(imgch, 0, 0, width, height);
 
     // plot sine wave documents
-    for (let x = 0; x < yvalues_fish.length; x ++) {
-        image(imgpaper_l, x*xspacing_fish - 20*scal, height-30*scal +yvalues_fish[x]/2, 28*scal, 13*scal);
+    theta_paper += 0.002;
+    let phi_paper = theta_paper;
+    for (let j = 0; j < yvalues_fish.length; j++) {
+        yvalues_fish[j] = sin(phi_paper) * amplitude_fish;
+        phi_paper +=dx_fish;
     }
+
+    for (let x = 0; x < yvalues_fish.length; x ++) {
+        image(imgpaper_outlined, (yvalues_fish.length - x)*xspacing_fish - 20*scal, height-22*scal +yvalues_fish[x]/2, 29*scal, 14*scal);
+    }
+
+    // plot frame
+    nzvar_x = noise(nz_x)*20;
+    nzvar_y = noise(nz_y)*20;
+    image(imgfloat, -10*scal+nzvar_x, -10*scal+nzvar_y, 400*scal, 400*scal);
+    //}
+    nz_x += 0.005;
+    nz_y += 0.01;
+    //if(nz >= yvalues_fish.length*10){
+    //    nz = 1;
+
 
     //noLoop();
 }
@@ -251,6 +260,7 @@ function calcWave() {
     // 'angular velocity' here)
     theta += 0.04;
     theta_fish +=0.01;
+    theta_paper +=0.1;// 波の速さはここ
   
     // For every x value, calculate a y value with sine function
     let x = theta;
@@ -262,6 +272,11 @@ function calcWave() {
     for (let j = 0; j < yvalues_fish.length; j++) {
         yvalues_fish[j] = sin(x_fish) *amplitude_fish;
         x_fish +=dx_fish;
+    }
+    let x_paper = theta_paper;
+    for (let j = 0; j < yvalues_fish.length; j++) {
+        yvalues_fish[j] = sin(x_paper) *amplitude_fish;
+        x_paper +=dx_fish;
     }
   }
   
