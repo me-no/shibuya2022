@@ -50,12 +50,12 @@ function preload() {
 
     imgkoimain = loadImage("koi.png");
     imgkoimain_back = loadImage("koi_purpleback.png");
-    imgkoimain_white = loadImage("koi_whiteback.png");
+    imgkoimain_white = loadImage("koi_whiteback_wing.png");
     imgfloat = loadImage("floatfront.png");
 
     imgpaper_s = loadImage("paper_small.png");
     imgpaper_l = loadImage("paper_large.png");
-    imgpaper_outlined = loadImage("paper_l_outlined.png");
+    imgpaper_outlined = loadImage("paper_l_outlined2.png");
 
     imgsakura_deep = loadImage("deepsakura.png");
     imgsakura_light = loadImage("lightsakura.png")
@@ -248,7 +248,6 @@ function draw() {
     nz_y += 0.01;
     //if(nz >= yvalues_fish.length*10){
     //    nz = 1;
-
 
     //noLoop();
 }
