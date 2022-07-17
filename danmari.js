@@ -42,16 +42,17 @@ function preload() {
 
     // Images
     imgch = loadImage("kid.png");
-    imgkoideep = loadImage("deepfish.png");
-    imgkoilight = loadImage("lightfish.png");
+    imgmask = loadImage("mask.png");
+    imgumbrella = loadImage("umbrella.png");
+    imgbackpack = loadImage("backpack.png");
     imgkoiblue_nostroke = loadImage("bluefish_noStroke.png");
     imgkoiblue = loadImage("bluefish.png");
     imgkoioutlined = loadImage("fish_outlined.png");
 
     imgkoimain = loadImage("koi.png");
-    imgkoimain_back = loadImage("koi_purpleback.png");
     imgkoimain_white = loadImage("koi_whiteback_wing.png");
     imgfloat = loadImage("floatfront.png");
+    imgfloat_shade = loadImage("floatfront_shade.png");
 
     imgpaper_s = loadImage("paper_small.png");
     imgpaper_l = loadImage("paper_large.png");
@@ -226,6 +227,9 @@ function draw() {
     // plot image 
     image(imgkoimain, 0, 0, width, height);
     image(imgch, 0, 0, width, height);
+    image(imgmask, 0, 0, width, height);
+    image(imgumbrella, 0, 0, width, height);
+    image(imgbackpack, 0, 0, width, height);
 
     // plot sine wave documents
     theta_paper += 0.002;
@@ -238,6 +242,12 @@ function draw() {
     for (let x = 0; x < yvalues_fish.length; x ++) {
         image(imgpaper_outlined, (yvalues_fish.length - x)*xspacing_fish - 20*scal, height-22*scal +yvalues_fish[x]/2, 29*scal, 14*scal);
     }
+
+    // plot frame_shade
+    nzvar_xs = noise(nz_x)*10;
+    nzvar_ys = noise(nz_y)*10;
+    image(imgfloat_shade, -10*scal+nzvar_xs, -10*scal+nzvar_ys, 400*scal, 400*scal);
+    //}
 
     // plot frame
     nzvar_x = noise(nz_x)*20;
